@@ -1,33 +1,23 @@
-
-from collections import defaultdict
-
 def get_max_sum(N, K, A):
     max_sum = 0
-    current_sum = 0
-    left = 0
-    freq = defaultdict(int)
-    distinct = 0
 
-    for right in range(N):
-        val = A[right]
-        freq[val] += 1
+    for i in range(N):
+        freq = {}
+        current_sum = 0
+        distinct = 0
 
-        if freq[val] == 1:  # First time seeing this element
-            distinct += 1
+        for j in range(i, N):
+            val = A[j]
+            if val not in freq:
+                freq[val] = 1
+                distinct += 1
+            else:
+                freq[val] += 1
 
-        current_sum += val
+            if distinct > K:
+                break
 
-        # Shrink window from left if distinct count > K
-        while distinct > K:
-            freq[A[left]] -= 1
-            current_sum -= A[left]
-
-            if freq[A[left]] == 0:
-                distinct -= 1
-
-            left += 1
-
-        # Update max sum for valid subarray
-        max_sum = max(max_sum, current_sum)
+            current_sum += val
+            max_sum = max(max_sum, current_sum)
 
     return max_sum
